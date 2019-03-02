@@ -42,21 +42,21 @@ class ApplicationViews extends Component {
   
 
   deleteAndListAnimals = (id) => {
-    AnimalManager.deleteAnimal(id)
+    AnimalManager.deleteAndList(id)
     .then(animals => {
       this.setState({animals: animals})
     })
   }
 
   deleteAndListOwners = (id) => {
-    OwnerManager.deleteOwner(id)
+    OwnerManager.deleteAndList(id)
     .then(owners => {
       this.setState({owners: owners})
     })
   }
 
   deleteAndListEmployees = (id) => {
-    EmployeeManager.deleteEmployee(id)
+    EmployeeManager.deleteAndList(id)
     .then(employees => {
       this.setState({employees: employees})
     })

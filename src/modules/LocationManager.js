@@ -1,12 +1,6 @@
-const remoteURL = "http://localhost:5002"
-
-const LocationManager = {
-    getAll(){
-        return fetch(`${remoteURL}/locations`)
-        .then(r => r.json())
+import APIManager from "./APIManager"
+export default Object.create(APIManager, {
+    collection: {
+        value: "locations"
     }
-
-  
-}
-
-export default LocationManager;
+})
