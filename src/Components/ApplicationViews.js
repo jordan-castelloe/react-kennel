@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import React, { Component } from "react";
 import AnimalList from "./Animals/AnimalList";
 import AnimalDetail from "./Animals/AnimalDetail";
@@ -9,15 +9,22 @@ import EmployeeDetail from "./Employees/EmployeeDetail";
 import Ownerlist from "./Owners/OwnerList";
 import SearchResults from "./SearchResults/SearchResults";
 import APIManager from "../modules/APIManager";
+import Login from "./Authentication/Login";
 
 class ApplicationViews extends Component {
   state = {
     employees: [],
     locations: [],
     animals: [],
-    owners: []
+    owners: [],
+    isLoggedIn: false
   };
 
+  isAuthenticated = () => sessionStorage.getItem("credentials") !== null;
+
+  login = () => {
+    this.setState({isLoggedIn: true})
+  }
   componentDidMount() {
     const newState = {};
     APIManager.getAll("animals")
@@ -31,7 +38,7 @@ class ApplicationViews extends Component {
       })
       .then(employees => {
         newState.employees = employees;
-        return APIManager.getAll("owners");
+        return APIManager.getAll("locations");
       })
       .then(locations => {
         newState.locations = locations;
@@ -53,94 +60,133 @@ class ApplicationViews extends Component {
       newState[collection] = data;
       this.setState(newState);
     });
-  }
+  };
 
   render() {
     return (
       <div className="app-views">
+      <Route path="/login" render={props => <Login {...props} />} />
         <Route
           exact
           path="/"
           render={props => {
-            return <LocationList locations={this.state.locations} />;
+            if(this.isAuthenticated()){
+              return <LocationList locations={this.state.locations} />;
+            } else {
+              return <Redirect to="/login" />;
+            }
+            
           }}
         />
         <Route
           exact
           path="/animals"
           render={props => {
-            return (
-              <AnimalList
-                {...props}
-                deleteAndList={this.deleteAndList}
-                animals={this.state.animals}
-              />
-            );
+            if(this.isAuthenticated()){
+              return (
+                <AnimalList
+                  {...props}
+                  deleteAndList={this.deleteAndList}
+                  animals={this.state.animals}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+      
           }}
         />
         <Route
           path="/animals/new"
           render={props => {
-            return (
-              <AnimalForm
-                {...props}
-                postAndList={this.postAndList}
-                employees={this.state.employees}
-              />
-            );
+            if(this.isAuthenticated()){
+              return (
+                <AnimalForm
+                  {...props}
+                  postAndList={this.postAndList}
+                  employees={this.state.employees}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            } 
           }}
         />
         <Route
           exact
           path="/employees"
           render={props => {
-            return (
-              <EmployeeList
-                employees={this.state.employees}
-                deleteAndList={this.deleteAndList}
-              />
-            );
+            if (this.isAuthenticated()) {
+              return (
+                <EmployeeList
+                  deleteAndList={this.deleteAndList}
+                  employees={this.state.employees}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
           }}
         />
         <Route
+          exact
           path="/owners"
           render={props => {
-            return (
-              <Ownerlist
-                owners={this.state.owners}
-                deleteAndList={this.deleteAndList}
-              />
-            );
+            if(this.isAuthenticated()){
+              return (
+                <Ownerlist
+                  owners={this.state.owners}
+                  deleteAndList={this.deleteAndList}
+                /> );
+            } else {
+              return <Redirect to="/login" />;
+            }
           }}
         />
         <Route
+          exact 
           path="/searchResults"
           render={props => {
-            return <SearchResults searchTerm={props} />;
+            if(this.isAuthenticated()){
+              return <SearchResults searchTerm={props} />;
+            } else {
+              return <Redirect to="/login" />;
+            }
+            
           }}
         />
         <Route
           path="/animals/:animalId(\d+)"
           render={props => {
-            return (
-              <AnimalDetail
-                {...props}
-                deleteAndList={this.deleteAndList}
-                animals={this.state.animals}
-              />
-            );
+            if(this.isAuthenticated()){
+              return (
+                <AnimalDetail
+                  {...props}
+                  deleteAndList={this.deleteAndList}
+                  animals={this.state.animals}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          
           }}
         />
         <Route
           path="/employees/:employeeId(\d+)"
           render={props => {
-            return (
-              <EmployeeDetail
-                {...props}
-                deleteAndList={this.deleteAndList}
-                employees={this.state.employees}
-              />
-            );
+            if(this.isAuthenticated()){
+              return (
+                <EmployeeDetail
+                  {...props}
+                  deleteAndList={this.deleteAndList}
+                  employees={this.state.employees}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          
           }}
         />
       </div>
