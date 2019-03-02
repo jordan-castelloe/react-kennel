@@ -1,6 +1,7 @@
 .animals {
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .icon--dog {
@@ -23,3 +24,8 @@
     margin: 12px 0 0 0;
     font-size: 0.7em;
 }
+
+.animalButton {
+    display: block;
+    margin: auto;
+  }

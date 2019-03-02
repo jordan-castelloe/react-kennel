@@ -7,7 +7,16 @@ const APIManager = {
    },
    deleteAndList(id, collection){
        return fetch(`${remoteURL}/${collection}/${id}`, {method: "DELETE"}).then(() => this.getAll(collection))
-   }
+   },
+   postAndList(objectToPost, collection) {
+    return fetch(`${remoteURL}/${collection}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(objectToPost)
+    }).then(() => this.getAll(collection))
+  }
 }
 
 export default APIManager;
