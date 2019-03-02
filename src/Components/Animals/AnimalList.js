@@ -1,36 +1,28 @@
-import React, { Component } from 'react';
-class AnimalList extends Component {
+import React, { Component } from 'react'
+import dog from "./DogIcon.png"
+import "./Animal.css"
 
+export default class AnimalList extends Component {
 
-    animalsWithOwners = this.props.animals.map(animal => {
-
-        // Filters the animalOwners array for entries with the current animal's id
-        const matchingAnimalOwners = this.props.animalOwners.filter(animalOwner => animalOwner.animalId === animal.id);
-        
-        // Maps over the array of matching entries from the join table and finds the owner's name from the owners table
-        const matchingOwnerNames = matchingAnimalOwners.map(animalOwner=> {
-            const ownerObject = this.props.owners.find(owner => owner.id === animalOwner.ownerId);
-            return ownerObject.name
-        })
-        
-        // Return a new data structure with the animal name and an array of owner names
-        return {
-            id: animal.id,
-            name: animal.name,
-            ownerNames: matchingOwnerNames
-        }
-    })
-    render() {
-        return (<section>
-            <h3>Animals</h3>
-            {this.animalsWithOwners.map(animal => {
-                return <div key={animal.id}>
-                    <p>{animal.name}</p>
-                    <p>Owners: {animal.ownerNames.join(", ")}</p>
-                </div>
-            })}
-        </section>);
+    render () {
+        return (
+            <section className="animals">
+            {
+                this.props.animals.map(animal =>
+                    <div key={animal.id} className="card">
+                        <div className="card-body">
+                            <h5 className="card-title">
+                                <img src={dog} alt="dog icon" className="icon--dog" />
+                                {animal.name}
+                                <button
+                                    onClick={() => this.props.deleteAndList(animal.id)}
+                                    className="card-link">Delete</button>
+                            </h5>
+                        </div>
+                    </div>
+                )
+            }
+            </section>
+        )
     }
 }
-
-export default AnimalList;

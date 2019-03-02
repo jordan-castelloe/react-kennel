@@ -6,34 +6,63 @@ import LocationList from "./Locations/LocationList";
 import EmployeeList from "./Employees/EmployeeList";
 import Ownerlist from "./Owners/OwnerList";
 import SearchResults from "./SearchResults/SearchResults";
+import AnimalManager from "../modules/AnimalManager.js"
+import EmployeeManager from "../modules/EmployeeManager";
+import OwnerManager from "../modules/OwnerManager";
+import LocationManager from "../modules/LocationManager";
 
 class ApplicationViews extends Component {
   state = {
     employees: [],
     locations: [],
     animals: [],
-    owners: [],
-    animalOwners: []
+    owners: []
   };
 
   componentDidMount() {
     const newState = {};
-
-    fetch("http://localhost:5002/animals")
-      .then(r => r.json())
-      .then(animals => (newState.animals = animals))
-      .then(() => fetch("http://localhost:5002/employees").then(r => r.json()))
-      .then(employees => (newState.employees = employees))
-      .then(() => fetch("http://localhost:5002/locations").then(r => r.json()))
-      .then(locations => (newState.locations = locations))
-      .then(() => fetch("http://localhost:5002/owners").then(r => r.json()))
-      .then(owners => (newState.owners = owners))
-      .then(() =>
-        fetch("http://localhost:5002/animalOwners").then(r => r.json())
-      )
-      .then(animalOwners => (newState.animalOwners = animalOwners))
-      .then(() => this.setState(newState));
+    AnimalManager.getAll()
+    .then(animals => {
+      newState.animals = animals
+      return OwnerManager.getAll()
+    })
+    .then(owners => {
+      newState.owners = owners;
+      return EmployeeManager.getAll()
+    })
+    .then(employees => {
+      newState.employees = employees
+      return LocationManager.getAll()
+    })
+    .then(locations => {
+      newState.locations = locations
+      this.setState(newState)
+    })
   }
+  
+
+  deleteAndListAnimals = (id) => {
+    AnimalManager.deleteAnimal(id)
+    .then(animals => {
+      this.setState({animals: animals})
+    })
+  }
+
+  deleteAndListOwners = (id) => {
+    OwnerManager.deleteOwner(id)
+    .then(owners => {
+      this.setState({owners: owners})
+    })
+  }
+
+  deleteAndListEmployees = (id) => {
+    EmployeeManager.deleteEmployee(id)
+    .then(employees => {
+      this.setState({employees: employees})
+    })
+  }
+
+ 
   render() {
     return (
       <React.Fragment>
@@ -50,8 +79,7 @@ class ApplicationViews extends Component {
             return (
               <AnimalList
                 animals={this.state.animals}
-                owners={this.state.owners}
-                animalOwners={this.state.animalOwners}
+                deleteAndList={this.deleteAndListAnimals}
               />
             );
           }}
@@ -59,13 +87,19 @@ class ApplicationViews extends Component {
         <Route
           path="/employees"
           render={props => {
-            return <EmployeeList employees={this.state.employees} />;
+            return <EmployeeList 
+            employees={this.state.employees} 
+            deleteAndList={this.deleteAndListEmployees}
+            
+            />;
           }}
         />
         <Route
           path="/owners"
           render={props => {
-            return <Ownerlist owners={this.state.owners} />;
+            return <Ownerlist owners={this.state.owners}
+            deleteAndList={this.deleteAndListOwners}
+            />;
           }}
         />
        <Route
