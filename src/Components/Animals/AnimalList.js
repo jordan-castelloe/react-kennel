@@ -15,7 +15,7 @@ export default class AnimalList extends Component {
                                 <img src={dog} alt="dog icon" className="icon--dog" />
                                 {animal.name}
                                 <button
-                                    onClick={() => this.props.deleteAndList(animal.id)}
+                                    onClick={() => this.props.deleteAndList(animal.id, "animals")}
                                     className="card-link">Delete</button>
                             </h5>
                         </div>

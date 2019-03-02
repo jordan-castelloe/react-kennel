@@ -3,10 +3,6 @@
     {
       "id": 5,
       "name": "Blaise Roberts 2"
-    },
-    {
-      "id": 6,
-      "name": "Blaise Roberts 3"
     }
   ],
   "locations": [
@@ -21,24 +17,11 @@
       "address": "10101 Binary Court"
     }
   ],
-  "animals": [
-    {
-      "id": 1,
-      "name": "Wiggles 1"
-    },
-    {
-      "id": 5,
-      "name": "Wiggles 4"
-    }
-  ],
+  "animals": [],
   "owners": [
     {
-      "id": 3,
-      "name": "Dani Adkins"
-    },
-    {
-      "id": 4,
-      "name": "Adam Oswalt"
+      "id": 1,
+      "name": "Dani"
     }
   ],
   "animalOwners": []

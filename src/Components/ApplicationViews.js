@@ -6,10 +6,7 @@ import LocationList from "./Locations/LocationList";
 import EmployeeList from "./Employees/EmployeeList";
 import Ownerlist from "./Owners/OwnerList";
 import SearchResults from "./SearchResults/SearchResults";
-import AnimalManager from "../modules/AnimalManager.js"
-import EmployeeManager from "../modules/EmployeeManager";
-import OwnerManager from "../modules/OwnerManager";
-import LocationManager from "../modules/LocationManager";
+import APIManager from "../modules/APIManager"
 
 class ApplicationViews extends Component {
   state = {
@@ -21,18 +18,18 @@ class ApplicationViews extends Component {
 
   componentDidMount() {
     const newState = {};
-    AnimalManager.getAll()
+    APIManager.getAll("animals")
     .then(animals => {
       newState.animals = animals
-      return OwnerManager.getAll()
+      return APIManager.getAll("owners")
     })
     .then(owners => {
       newState.owners = owners;
-      return EmployeeManager.getAll()
+      return APIManager.getAll("employees")
     })
     .then(employees => {
       newState.employees = employees
-      return LocationManager.getAll()
+      return APIManager.getAll("owners")
     })
     .then(locations => {
       newState.locations = locations
@@ -41,27 +38,13 @@ class ApplicationViews extends Component {
   }
   
 
-  deleteAndListAnimals = (id) => {
-    AnimalManager.deleteAndList(id)
-    .then(animals => {
-      this.setState({animals: animals})
+  deleteAndList = (id, collection) => {
+    const newState = this.state;
+    APIManager.deleteAndList(id, collection).then((data) => {
+      newState[collection] = data;
+      this.setState(newState);
     })
   }
-
-  deleteAndListOwners = (id) => {
-    OwnerManager.deleteAndList(id)
-    .then(owners => {
-      this.setState({owners: owners})
-    })
-  }
-
-  deleteAndListEmployees = (id) => {
-    EmployeeManager.deleteAndList(id)
-    .then(employees => {
-      this.setState({employees: employees})
-    })
-  }
-
  
   render() {
     return (
@@ -79,7 +62,7 @@ class ApplicationViews extends Component {
             return (
               <AnimalList
                 animals={this.state.animals}
-                deleteAndList={this.deleteAndListAnimals}
+                deleteAndList={this.deleteAndList}
               />
             );
           }}
@@ -89,7 +72,7 @@ class ApplicationViews extends Component {
           render={props => {
             return <EmployeeList 
             employees={this.state.employees} 
-            deleteAndList={this.deleteAndListEmployees}
+            deleteAndList={this.deleteAndList}
             
             />;
           }}
@@ -98,7 +81,7 @@ class ApplicationViews extends Component {
           path="/owners"
           render={props => {
             return <Ownerlist owners={this.state.owners}
-            deleteAndList={this.deleteAndListOwners}
+            deleteAndList={this.deleteAndList}
             />;
           }}
         />

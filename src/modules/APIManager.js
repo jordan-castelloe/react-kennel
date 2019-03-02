@@ -1,33 +1,13 @@
 
-export default Object.create(null, {
-    collection: {
-        value: "",
-        writable: true,
-        enumerable: true,
-    },
-    remoteURL: {
-        value: "http://localhost:5002",
-        writable: true,
-        enumerable: true
-    },
-    getOne: {
-        value: function (id) {
-            return fetch(`${this.remoteURL}/${this.collection}/${id}`).then(e => e.json())
-        }
-    },
-    getAll: {
-        value: function () {
-            return fetch(`${this.remoteURL}/${this.collection}`).then(e => e.json())
-        }
-    },
-    deleteAndList: {
-        value: function(id){
-            return fetch(`${this.remoteURL}/${this.collection}/${id}`, {method: "DELETE"}).then(() => this.getAll())
-        }
-    },
-    addAndList: {
-        value: function(id){
-            return fetch(`${this.remoteURL}/${this.collection}/${id}`, {method: "POST"}).then(() => this.getAll())
-        }
-    }
-})
+
+const remoteURL = "http://localhost:5002"
+const APIManager = {
+   getAll(collection){
+    return fetch(`${remoteURL}/${collection}`).then(e => e.json())
+   },
+   deleteAndList(id, collection){
+       return fetch(`${remoteURL}/${collection}/${id}`, {method: "DELETE"}).then(() => this.getAll(collection))
+   }
+}
+
+export default APIManager;
