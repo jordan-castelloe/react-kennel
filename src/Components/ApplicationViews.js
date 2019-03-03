@@ -69,6 +69,8 @@ class ApplicationViews extends Component {
     });
   };
 
+
+
   render() {
     return (
       <div className="app-views">
@@ -363,10 +365,10 @@ class ApplicationViews extends Component {
         />
         <Route
           exact
-          path="/searchResults"
+          path="/search"
           render={props => {
             if (this.isAuthenticated()) {
-              return <SearchResults />;
+              return <SearchResults searchResults={this.props.searchResults} />;
             } else {
               return <Redirect to="/login" />;
             }

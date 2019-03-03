@@ -3,7 +3,7 @@ const APIManager = {
   getAll(collection) {
     return fetch(`${remoteURL}/${collection}`).then(e => e.json());
   },
-  getOne(id, collection){
+  getOne(id, collection) {
     return fetch(`${remoteURL}/${collection}/${id}`).then(e => e.json());
   },
   deleteAndList(id, collection) {
@@ -28,6 +28,10 @@ const APIManager = {
       },
       body: JSON.stringify(objectToPost)
     }).then(() => this.getAll(collection));
+  },
+  searchCollection(searchTerm, collection) {
+    const queryString = `q=${searchTerm}`;
+    return fetch(`${remoteURL}/${collection}?${queryString}`).then(r => r.json());
   }
 };
 

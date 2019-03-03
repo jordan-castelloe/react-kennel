@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom'
 
 class SearchBar extends Component {
   state = {
-    searchQuery: ""
+    searchTerm: ""
   };
 
   // Update state whenever an input field is edited
@@ -13,22 +13,21 @@ class SearchBar extends Component {
     this.setState(stateToChange);
   };
 
-  handleSearch = evt => {
+  handleSubmit = evt => {
     evt.preventDefault();
-    this.props.history.push({
-        pathname: "/searchResults",
-        state: {searchTerm: this.state.searchQuery}
-    })
-  };
+    this.props.handleSearch(this.state.searchTerm);
+  }
+
+
   render() {
     return (
-      <form className="form-inline my-2 my-lg-0" onSubmit={this.handleSearch}>
+      <form className="form-inline my-2 my-lg-0" onSubmit={this.handleSubmit}>
         <input
           className="form-control mr-sm-2"
           type="search"
           placeholder="Search"
           aria-label="Search"
-          id="searchQuery"
+          id="searchTerm"
           onChange={this.handleFieldChange}
         />
       </form>
