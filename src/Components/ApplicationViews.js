@@ -2,6 +2,7 @@ import { Route, Redirect } from "react-router-dom";
 import React, { Component } from "react";
 import AnimalList from "./Animals/AnimalList";
 import AnimalDetail from "./Animals/AnimalDetail";
+import AnimalEditForm from "./Animals/AnimalEditForm";
 import AnimalForm from "./Animals/AnimalForm";
 import LocationList from "./Locations/LocationList";
 import EmployeeList from "./Employees/EmployeeList";
@@ -23,8 +24,8 @@ class ApplicationViews extends Component {
   isAuthenticated = () => sessionStorage.getItem("credentials") !== null;
 
   login = () => {
-    this.setState({isLoggedIn: true})
-  }
+    this.setState({ isLoggedIn: true });
+  };
   componentDidMount() {
     const newState = {};
     APIManager.getAll("animals")
@@ -62,27 +63,34 @@ class ApplicationViews extends Component {
     });
   };
 
+  editAndList = (editedObject, collection) => {
+    const newState = this.state;
+    APIManager.editAndList(editedObject, collection).then(data => {
+      newState[collection] = data;
+      this.setState(newState);
+    });
+  }
+
   render() {
     return (
       <div className="app-views">
-      <Route path="/login" render={props => <Login {...props} />} />
+        <Route path="/login" render={props => <Login {...props} />} />
         <Route
           exact
           path="/"
           render={props => {
-            if(this.isAuthenticated()){
+            if (this.isAuthenticated()) {
               return <LocationList locations={this.state.locations} />;
             } else {
               return <Redirect to="/login" />;
             }
-            
           }}
         />
         <Route
           exact
           path="/animals"
           render={props => {
-            if(this.isAuthenticated()){
+            if (this.isAuthenticated()) {
               return (
                 <AnimalList
                   {...props}
@@ -93,13 +101,12 @@ class ApplicationViews extends Component {
             } else {
               return <Redirect to="/login" />;
             }
-      
           }}
         />
         <Route
           path="/animals/new"
           render={props => {
-            if(this.isAuthenticated()){
+            if (this.isAuthenticated()) {
               return (
                 <AnimalForm
                   {...props}
@@ -109,7 +116,32 @@ class ApplicationViews extends Component {
               );
             } else {
               return <Redirect to="/login" />;
-            } 
+            }
+          }}
+        />
+        <Route
+          exact
+          path="/animals/:animalId(\d+)"
+          render={props => {
+            return (
+              <AnimalDetail
+                {...props}
+                deleteAnimal={this.deleteAnimal}
+                animals={this.state.animals}
+              />
+            );
+          }}
+        />
+        <Route
+          path="/animals/:animalId(\d+)/edit"
+          render={props => {
+            return (
+              <AnimalEditForm
+                {...props}
+                employees={this.state.employees}
+                editAndList={this.editAndList}
+              />
+            );
           }}
         />
         <Route
@@ -121,6 +153,7 @@ class ApplicationViews extends Component {
                 <EmployeeList
                   deleteAndList={this.deleteAndList}
                   employees={this.state.employees}
+                  animals={this.state.animals}
                 />
               );
             } else {
@@ -132,50 +165,33 @@ class ApplicationViews extends Component {
           exact
           path="/owners"
           render={props => {
-            if(this.isAuthenticated()){
+            if (this.isAuthenticated()) {
               return (
                 <Ownerlist
                   owners={this.state.owners}
                   deleteAndList={this.deleteAndList}
-                /> );
-            } else {
-              return <Redirect to="/login" />;
-            }
-          }}
-        />
-        <Route
-          exact 
-          path="/searchResults"
-          render={props => {
-            if(this.isAuthenticated()){
-              return <SearchResults searchTerm={props} />;
-            } else {
-              return <Redirect to="/login" />;
-            }
-            
-          }}
-        />
-        <Route
-          path="/animals/:animalId(\d+)"
-          render={props => {
-            if(this.isAuthenticated()){
-              return (
-                <AnimalDetail
-                  {...props}
-                  deleteAndList={this.deleteAndList}
-                  animals={this.state.animals}
                 />
               );
             } else {
               return <Redirect to="/login" />;
             }
-          
+          }}
+        />
+        <Route
+          exact
+          path="/searchResults"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return <SearchResults searchTerm={props} />;
+            } else {
+              return <Redirect to="/login" />;
+            }
           }}
         />
         <Route
           path="/employees/:employeeId(\d+)"
           render={props => {
-            if(this.isAuthenticated()){
+            if (this.isAuthenticated()) {
               return (
                 <EmployeeDetail
                   {...props}
@@ -186,7 +202,6 @@ class ApplicationViews extends Component {
             } else {
               return <Redirect to="/login" />;
             }
-          
           }}
         />
       </div>

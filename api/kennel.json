@@ -23,42 +23,16 @@
   ],
   "animals": [
     {
-      "id": 1,
-      "name": "Doodles"
-    },
-    {
-      "id": 2,
-      "name": "Doodles 1"
-    },
-    {
-      "id": 4,
-      "name": "Doodles 3"
-    },
-    {
-      "id": 5,
-      "name": "Doodles 4"
-    },
-    {
-      "id": 7,
-      "name": "Doodles 6"
-    },
-    {
-      "name": "Hoagie",
-      "breed": "Havanese",
-      "employeeId": 1,
-      "id": 10
-    },
-    {
-      "name": "new",
-      "breed": "new new new",
-      "employeeId": null,
-      "id": 11
-    },
-    {
       "name": "fajflkd",
       "breed": "dfdafd",
       "employeeId": 1,
       "id": 12
+    },
+    {
+      "id": 13,
+      "name": "EDITED new animal!!!!!!!!!!",
+      "breed": "EDITED BREED",
+      "employeeId": 2
     }
   ],
   "owners": [
