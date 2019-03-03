@@ -20,8 +20,8 @@
   "locations": [
     {
       "id": 1,
-      "name": "Nashville North!!! Edited AGAIN",
-      "address": "500 Circle Way NEEWWW"
+      "name": "Nashville North",
+      "address": "500 Circle Way"
     },
     {
       "id": 2,
@@ -37,13 +37,13 @@
   "animals": [
     {
       "id": 14,
-      "name": "EDITED EDITED EDITED",
-      "breed": "brand new spankin breed",
+      "name": "Doodles",
+      "breed": "Goldendoodle",
       "employeeId": 3
     },
     {
-      "name": "new pet!! edited again",
-      "breed": "just added this",
+      "name": "Jeremy",
+      "breed": "Black Lab",
       "id": 15
     }
   ],
