@@ -1,16 +1,11 @@
 import { Route, Redirect } from "react-router-dom";
 import React, { Component } from "react";
-import AnimalList from "./Animals/AnimalList";
-import AnimalDetail from "./Animals/AnimalDetail";
-import AnimalEditForm from "./Animals/AnimalEditForm";
-import AnimalForm from "./Animals/AnimalForm";
-import LocationList from "./Locations/LocationList";
-import EmployeeList from "./Employees/EmployeeList";
-import EmployeeDetail from "./Employees/EmployeeDetail";
-import Ownerlist from "./Owners/OwnerList";
 import SearchResults from "./SearchResults/SearchResults";
 import APIManager from "../modules/APIManager";
 import Login from "./Authentication/Login";
+import ResourceList from "./GenericComponents/ResourceList";
+import DetailCard from "./GenericComponents/DetailCard";
+import Form from "./GenericComponents/Form";
 
 class ApplicationViews extends Component {
   state = {
@@ -26,6 +21,7 @@ class ApplicationViews extends Component {
   login = () => {
     this.setState({ isLoggedIn: true });
   };
+
   componentDidMount() {
     const newState = {};
     APIManager.getAll("animals")
@@ -46,6 +42,8 @@ class ApplicationViews extends Component {
         this.setState(newState);
       });
   }
+
+  //TODO: refactor search so that you can search directly from the search results page
 
   deleteAndList = (id, collection) => {
     const newState = this.state;
@@ -69,21 +67,81 @@ class ApplicationViews extends Component {
       newState[collection] = data;
       this.setState(newState);
     });
-  }
+  };
 
   render() {
     return (
       <div className="app-views">
-        <Route path="/login" render={props => <Login {...props} />} />
+        <Route exact path="/" render={props => <Login {...props} />} />
         <Route
           exact
-          path="/"
+          path="/locations"
           render={props => {
             if (this.isAuthenticated()) {
-              return <LocationList locations={this.state.locations} />;
+              return (
+                <ResourceList
+                  postAndList={this.postAndList}
+                  resources={this.state.locations}
+                  collection="locations"
+                  {...props}
+                />
+              );
             } else {
               return <Redirect to="/login" />;
             }
+          }}
+        />
+        <Route
+          path="/locations/new"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <Form
+                  {...props}
+                  collection="locations"
+                  postAndList={this.postAndList}
+                  resourceTemplate={{ name: "", address: "" }}
+                  labels={{
+                    formHeading: "Add a New Location"
+                  }}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          }}
+        />
+        <Route
+          exact
+          path="/locations/:id(\d+)"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <DetailCard
+                  resources={this.state.locations}
+                  collection="locations"
+                  deleteAndList={this.deleteAndList}
+                  {...props}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          }}
+        />
+        <Route
+          path="/locations/:id(\d+)/edit"
+          render={props => {
+            return (
+              <Form
+                {...props}
+                editAndList={this.editAndList}
+                collection="locations"
+                labels={{
+                  formHeading: "Edit Your Location"
+                }}
+              />
+            );
           }}
         />
         <Route
@@ -92,10 +150,29 @@ class ApplicationViews extends Component {
           render={props => {
             if (this.isAuthenticated()) {
               return (
-                <AnimalList
+                <ResourceList
+                  postAndList={this.postAndList}
+                  resources={this.state.animals}
+                  collection="animals"
                   {...props}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          }}
+        />
+        <Route
+          exact
+          path="/animals/:id(\d+)"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <DetailCard
+                  resources={this.state.animals}
+                  collection="animals"
                   deleteAndList={this.deleteAndList}
-                  animals={this.state.animals}
+                  {...props}
                 />
               );
             } else {
@@ -108,10 +185,16 @@ class ApplicationViews extends Component {
           render={props => {
             if (this.isAuthenticated()) {
               return (
-                <AnimalForm
+                <Form
                   {...props}
+                  collection="animals"
                   postAndList={this.postAndList}
-                  employees={this.state.employees}
+                  resourceTemplate={{ name: "", breed: "", employeeId: "" }}
+                  labels={{
+                    formHeading: "Register a New Pet",
+                    dropdownLabel: "Choose a Caretaker"
+                  }}
+                  dropdownResource={this.state.employees}
                 />
               );
             } else {
@@ -120,26 +203,18 @@ class ApplicationViews extends Component {
           }}
         />
         <Route
-          exact
-          path="/animals/:animalId(\d+)"
+          path="/animals/:id(\d+)/edit"
           render={props => {
             return (
-              <AnimalDetail
+              <Form
                 {...props}
-                deleteAnimal={this.deleteAnimal}
-                animals={this.state.animals}
-              />
-            );
-          }}
-        />
-        <Route
-          path="/animals/:animalId(\d+)/edit"
-          render={props => {
-            return (
-              <AnimalEditForm
-                {...props}
-                employees={this.state.employees}
+                dropdownResource={this.state.employees}
                 editAndList={this.editAndList}
+                collection="animals"
+                labels={{
+                  formHeading: "Edit Your Pet",
+                  dropdownLabel: "Choose a Caretaker"
+                }}
               />
             );
           }}
@@ -150,15 +225,69 @@ class ApplicationViews extends Component {
           render={props => {
             if (this.isAuthenticated()) {
               return (
-                <EmployeeList
-                  deleteAndList={this.deleteAndList}
-                  employees={this.state.employees}
-                  animals={this.state.animals}
+                <ResourceList
+                  postAndList={this.postAndList}
+                  resources={this.state.employees}
+                  collection="employees"
+                  {...props}
                 />
               );
             } else {
               return <Redirect to="/login" />;
             }
+          }}
+        />
+        <Route
+          exact
+          path="/employees/:id(\d+)"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <DetailCard
+                  resources={this.state.employees}
+                  collection="employees"
+                  deleteAndList={this.deleteAndList}
+                  {...props}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          }}
+        />
+        <Route
+          path="/employees/new"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return (
+                <Form
+                  {...props}
+                  collection="employees"
+                  postAndList={this.postAndList}
+                  resourceTemplate={{ name: "" }}
+                  labels={{
+                    formHeading: "Add a New Employee"
+                  }}
+                />
+              );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          }}
+        />
+        <Route
+          path="/employees/:id(\d+)/edit"
+          render={props => {
+            return (
+              <Form
+                {...props}
+                editAndList={this.editAndList}
+                collection="employees"
+                labels={{
+                  formHeading: "Edit An Employee Information"
+                }}
+              />
+            );
           }}
         />
         <Route
@@ -167,9 +296,11 @@ class ApplicationViews extends Component {
           render={props => {
             if (this.isAuthenticated()) {
               return (
-                <Ownerlist
-                  owners={this.state.owners}
-                  deleteAndList={this.deleteAndList}
+                <ResourceList
+                  postAndList={this.postAndList}
+                  resources={this.state.owners}
+                  collection="owners"
+                  {...props}
                 />
               );
             } else {
@@ -179,26 +310,63 @@ class ApplicationViews extends Component {
         />
         <Route
           exact
-          path="/searchResults"
+          path="/owners/:id(\d+)"
           render={props => {
             if (this.isAuthenticated()) {
-              return <SearchResults searchTerm={props} />;
+              return (
+                <DetailCard
+                  resources={this.state.owners}
+                  collection="owners"
+                  deleteAndList={this.deleteAndList}
+                  {...props}
+                />
+              );
             } else {
               return <Redirect to="/login" />;
             }
           }}
         />
         <Route
-          path="/employees/:employeeId(\d+)"
+          path="/owners/new"
           render={props => {
             if (this.isAuthenticated()) {
               return (
-                <EmployeeDetail
+                <Form
                   {...props}
-                  deleteAndList={this.deleteAndList}
-                  employees={this.state.employees}
+                  collection="owners"
+                  postAndList={this.postAndList}
+                  resourceTemplate={{ name: "" }}
+                  labels={{
+                    formHeading: "Register a New Owner"
+                  }}
                 />
               );
+            } else {
+              return <Redirect to="/login" />;
+            }
+          }}
+        />
+        <Route
+          path="/owners/:id(\d+)/edit"
+          render={props => {
+            return (
+              <Form
+                {...props}
+                editAndList={this.editAndList}
+                collection="owners"
+                labels={{
+                  formHeading: "Edit Owner Information"
+                }}
+              />
+            );
+          }}
+        />
+        <Route
+          exact
+          path="/searchResults"
+          render={props => {
+            if (this.isAuthenticated()) {
+              return <SearchResults />;
             } else {
               return <Redirect to="/login" />;
             }

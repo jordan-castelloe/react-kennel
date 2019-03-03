@@ -5,40 +5,56 @@
       "name": "Trevor Tree"
     },
     {
-      "id": 2,
-      "name": "Josh"
+      "name": "Joan",
+      "id": 3
+    },
+    {
+      "name": "Mitch",
+      "id": 4
+    },
+    {
+      "name": "Sig!!!!",
+      "id": 5
     }
   ],
   "locations": [
     {
       "id": 1,
-      "name": "Nashville North",
-      "address": "500 Circle Way"
+      "name": "Nashville North!!! Edited AGAIN",
+      "address": "500 Circle Way NEEWWW"
     },
     {
       "id": 2,
       "name": "Nashville South",
       "address": "10101 Binary Court"
+    },
+    {
+      "name": "Nashville East",
+      "address": "5005 East Blvd",
+      "id": 3
     }
   ],
   "animals": [
     {
-      "name": "fajflkd",
-      "breed": "dfdafd",
-      "employeeId": 1,
-      "id": 12
+      "id": 14,
+      "name": "EDITED EDITED EDITED",
+      "breed": "brand new spankin breed",
+      "employeeId": 3
     },
     {
-      "id": 13,
-      "name": "EDITED new animal!!!!!!!!!!",
-      "breed": "EDITED BREED",
-      "employeeId": 2
+      "name": "new pet!! edited again",
+      "breed": "just added this",
+      "id": 15
     }
   ],
   "owners": [
     {
       "id": 1,
       "name": "Dani"
+    },
+    {
+      "name": "Fred",
+      "id": 2
     }
   ],
   "animalOwners": []
