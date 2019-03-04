@@ -12,7 +12,8 @@ export default class Dropdown extends Component {
         >
           {this.props.resources.map(r => {
             // TODO: refactor into ternary statements
-            if (r.id === this.props.defaultValue) {
+            debugger;
+            if (r.id === +this.props.defaultValue) {
               return (
                 <option selected key={r.id} id={r.id} value={r.id}>
                   {r.name}
