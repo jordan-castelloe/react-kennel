@@ -42,14 +42,10 @@
       "employeeId": 3
     },
     {
-      "name": "Jeremy",
-      "breed": "Black Lab",
+      "name": "Hoagie",
+      "breed": "Havanese",
+      "employeeId": "4",
       "id": 15
-    },
-    {
-      "name": "Pete",
-      "breed": "Collie",
-      "id": 16
     }
   ],
   "owners": [

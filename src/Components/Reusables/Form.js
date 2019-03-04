@@ -34,7 +34,6 @@ export default class Form extends Component {
     if (this.props.match.url.includes("/edit")) {
       APIManager.getOne(this.props.match.params.id, this.props.collection).then(
         response => {
-            console.log(response)
           this.setState(response);
         }
       );
@@ -56,7 +55,8 @@ export default class Form extends Component {
                 key={singleKey}
                   resources={this.props.dropdownResource}
                   id={singleKey}
-                  defaultValue={resourceTemplate[singleKey] || ""}
+                  handleFieldChange={this.handleFieldChange}
+                  defaultValue={resourceTemplate[singleKey] || this.props.labels.dropdownLabel}
                   heading={this.props.labels.dropdownLabel}
                 />
               );

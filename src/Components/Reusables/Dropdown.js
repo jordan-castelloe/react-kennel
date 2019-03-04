@@ -6,17 +6,26 @@ export default class Dropdown extends Component {
       <div className="form-group">
         <label htmlFor={this.props.id}>{this.props.heading}</label>
         <select
-          defaultValue=""
           name={this.props.id}
           id={this.props.id}
-          onChange={this.handleFieldChange}
+          onChange={this.props.handleFieldChange}
         >
-          <option value="">{this.props.heading}</option>
-          {this.props.resources.map(r=> (
-            <option key={r.id} id={r.id} value={r.id}>
-              {r.name}
-            </option>
-          ))}
+          {this.props.resources.map(r => {
+            // TODO: refactor into ternary statements
+            if (r.id === this.props.defaultValue) {
+              return (
+                <option selected key={r.id} id={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              );
+            } else {
+              return (
+                <option key={r.id} id={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              );
+            }
+          })}
         </select>
       </div>
     );

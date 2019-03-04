@@ -3,9 +3,9 @@ import React, { Component } from "react";
 import SearchResults from "./SearchResults/SearchResults";
 import APIManager from "../modules/APIManager";
 import Login from "./Authentication/Login";
-import ResourceList from "./GenericComponents/ResourceList";
-import DetailCard from "./GenericComponents/DetailCard";
-import Form from "./GenericComponents/Form";
+import ResourceList from "./Reusables/ResourceList";
+import DetailCard from "./Reusables/DetailCard";
+import Form from "./Reusables/Form";
 
 class ApplicationViews extends Component {
   state = {
